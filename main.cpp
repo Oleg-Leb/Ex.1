@@ -16,8 +16,7 @@ int main(int argc, char* argv[1])
 	cout << "Enter the directory path:\n" << std::endl;
 	path dir_path;
 	cin >> dir_path;
-	create_directory("D://AboutFiles");
- ofstream f("C:/AboutFiles/AbFiles.tsv");
+ ofstream f("AbFiles.tsv");
  f << "Name\t\t\tPath\t\t\t\t\tSize\t\t\t\t\t\t\tHash" << endl;
 
  if (is_directory(dir_path) && exists(dir_path))
@@ -36,7 +35,7 @@ int main(int argc, char* argv[1])
 			 result << myfile.rdbuf();
 			 a = result.str();
 			 f << it->path().filename() << "\t\t" << it->path() << "\t\t" << file_size(it->path()) << "\t\t"  <<"\t\t" <<get_md5(a)<< endl;
-		 }  cout << "AbFiles.tsv located in the C:/AboutFiles/" << endl;
+		 } 
  }
  else 
  {
