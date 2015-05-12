@@ -1,13 +1,43 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include <Windows.h>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <md5.h>
-
+#include <Windows.h>
 using namespace std;
 using namespace boost::filesystem;
+void search(path dir_path)
+{
+	ofstream f("AbFiles.tsv");
+	if (is_directory(dir_path) && exists(dir_path))
+	{
+
+		recursive_directory_iterator end;
+		for (recursive_directory_iterator it(dir_path); it != end; ++it)
+			if (is_regular_file(it->path()))
+			{
+
+				stringstream result;
+				string a;
+				ifstream myfile;
+				myfile.open(it->path().string(), ios::binary);
+				result << myfile.rdbuf();
+				a = result.str();
+				f << it->path().filename().string() << "\n" << it->path() << "\n" <<  file_size(it->path()) << endl;
+				f << endl;
+			}
+	}
+	else
+	{
+		cout << dir_path << " does not exist\n";
+	}
+
+
+	f.close();
+	return;
+};
+
 int main(int argc, char* argv[1])
 {
 	setlocale(LC_ALL, "russian");
@@ -16,38 +46,10 @@ int main(int argc, char* argv[1])
 	cout << "Enter the directory path:\n" << std::endl;
 	path dir_path;
 	cin >> dir_path;
- ofstream f("AbFiles.tsv");
- f << "Name\t\t\tPath\t\t\t\t\tSize\t\t\t\t\t\t\tHash" << endl;
-
- if (is_directory(dir_path) && exists(dir_path))
- {
-
-	 recursive_directory_iterator end;
-	 for (recursive_directory_iterator it(dir_path); it != end; ++it)
-		 if (is_regular_file(it->path()))
-		 {
-
-			 stringstream result;
-			 string a;
-
-			 ifstream myfile;
-			 myfile.open(it->path().string(), ios::binary);
-			 result << myfile.rdbuf();
-			 a = result.str();
-			 f << it->path().filename() << "\t\t" << it->path() << "\t\t" << file_size(it->path()) << "\t\t"  <<"\t\t" <<get_md5(a)<< endl;
-		 } 
- }
- else 
- {
-	 cout << dir_path << " does not exist\n";
- }
- 
-
-	f.close();
+	search(dir_path);
 	
 	
-	
+
 	system("pause");
-
+	return 0;
 }
-
